@@ -1,0 +1,4 @@
+essays/auto
+*.aux
+*.log
+*.pdf
