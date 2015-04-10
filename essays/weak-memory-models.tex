@@ -31,7 +31,7 @@ Programmers expect the actions of their imperative programs to execute in the or
 \section{Baking Logistics}
 \vspace{-0.25cm}
 
-To build intuition for the affects of weak memory models we will use the analogy of a recipe (the program) and a baker (the computer). For any recipe there are a list of steps to follow and with any luck the baker will produce the result defined by the recipe. Consider the example of a cake recipe (program): make the batter, make the icing, bake the cake, apply the icing.
+To build intuition for the effects of weak memory models we will use the analogy of a recipe (a program) and a baker (a process). For any recipe there are a list of steps to follow and with any luck the baker will produce the result defined by the recipe. Consider the example of a cake recipe (program): make the batter, make the icing, bake the cake, apply the icing.
 
 Note, that the baker can safely swap the order of the first two tasks while preserving the result. This could be advantageous in the case where some ingredient required for the batter is not immediately available but everything necessary for making the icing is at hand. Similarly, it is sometimes advantageous for processors to reorder instructions for performance reasons.
 
@@ -81,27 +81,21 @@ It turns out the answers are ``no'' and ``yes'', but the reasons why are not imm
 \vspace{-0.25cm}
 \section{Generating Examples}
 \vspace{-0.25cm}
-One way to determine whether swapping instructions will cause bad behavior is to find a counter example. Doing this by hand plays out as follows: move one of the stores or loads around, try an execution for the instructions in each process, trace the result in your head, repeat steps two and three until you think you've exhausted the possible interleavings, start at step one.
+One way to determine whether swapping instructions will cause bad behavior is to find a bad execution. Doing this by hand plays out as follows: move one of the stores or loads around, try an execution for the instructions in each process, trace the result in your head, repeat steps two and three until you think you've exhausted the possible interleavings, start at step one.
 
-With this approach, assuming the assignment to \ttf{flag0} in \ttf{p0} is allowed to reorder with the check of \ttf{flag1}, we can find the following execution:
-\vspace{-0.1cm}
-\begin{align*}
-    & \mathsf{p}0                 &  & \mathsf{p}1            & \\
-    & \mathsf{\mathsf{flag}1} = 0 &  &                        & \\
-    &                             &  & \mathsf{flag}1 \gets 1 & \\
- &                             &  & \mathsf{flag}0 = 0     & \\
- &                             &  & enter                  & \\
- & \mathsf{flag}0 \gets 1      &  &                        & \\
- & enter                       &  &                        & \\
-\end{align*}
-\vspace{-1.05cm}
-
-Alternately we could let the computer try all the possible permutations of the program following the steps we just outlined. This might work for Dekker's mutex but it's not clear this will scale well for more complex algorithms. More importantly computer generated counter examples might be hard to understand since the reason for arriving at a given counter example is partially opaque.
+We could also let the computer try all the possible permutations of the program following the steps we just outlined. This might work for Dekker's mutex but it's not clear this will scale well for more complex algorithms. More importantly computer generated counter examples might be hard to understand since the reason for arriving at a given counter example is partially opaque.
 
 \vspace{-0.25cm}
 \section{Instruction Scrub}
 \vspace{-0.25cm}
-Interactive experimentation might be a happy medium, especially if we just want to generate a counter example. Based on what we know about the algorithm a good place to start moving things around is the store to \ttf{flag0} or \ttf{flag1}. Being able to ``grab'' the instructions and ``scrub'' them up and down the execution while the computer checks for interleavings that violate some specification could mean fast counter example generation. Even if there is no specification being able to view possible interleavings for bad state could still be valuable but clearly sifting through the possibilities must be considered.
+
+Alternately we can provide tooling to see what happens when assignment to \ttf{flag0} in \ttf{p0} is allowed to reorder with the check of \ttf{flag1} which generates the following execution:
+
+\vspace{0.25cm}
+\includegraphics[width=0.45\textwidth]{images/scrub.png}
+\vspace{0.25cm}
+
+Interactive experimentation seems like a happy medium, especially if we just want to generate a bad execution. Based on what we know about the algorithm a good place to start moving things around is the store to \ttf{flag0} or \ttf{flag1}. Being able to ``grab'' the instructions and ``scrub'' them up and down the execution as illustrated while the computer checks for bad interleavings could mean quickly finding bad executions. Even if there is no specification. being able to view possible interleavings for bad state could still be valuable. Note that sifting through the possible executions will be necessary in this case.
 
 The programmer provides the key insight about which instructions are most likely to be critical for correct execution and then the computer can quickly try executions as she moves the instructions around. This avoids the burden of having to figure out which instructions have side effects that we should be concerned about. Returning to the analogy, the recipe creator knows more about the recipe and how the cake should be baked than anyone else, up to and including concerns about shared resources in the kitchen. For example, it's possible two cakes might be acceptable in the oven for certain types of cake.
 
@@ -111,7 +105,7 @@ Also, viewing the side effects of the various executions and playing with the pr
 \section{Further Ideas}
 \vspace{-0.25cm}
 
-Scrubbing is a tool based approach to generating counter examples, but it's natural to ask if there are language features that might make reasoning about algorithms easier in the presence of weak memory models.
+Scrubbing is a tool based approach to generating bad executions, but it's natural to ask if there are language features that might make reasoning about algorithms easier in the presence of weak memory models.
 
 Assuming some mechanism for tracking shared state access, a language-IDE combination could overlay all the possible points at which a given instruction could move to within the existing source if it's movement might be problematic. This might provide an early warning about undesirable behavior.
 
