@@ -3,7 +3,7 @@
 
   "Testing shows the presence, not the absence of bugs" - Edsger W. Dijkstra
   - embeds assumption of shifting, unpredictable environment
-  - in fact we can prove the absence of bugs *under some very specific conditions/assumptions
+  - in fact we can prove the absence of bugs *under some very specific conditions/assumptions*
 
 ** mocks/tests: weak in isolation, strong in aggregate
    - they embed the programmers understanding the system
@@ -101,7 +101,7 @@
 ** union of assumptions
    given all the assumptions made for all the tests,
    (under the assumption they are consistent)
-   what can we prove now?
+   what can we prove now?g
 
    provable:
    - exists a row, full_name != "Jim Jones"
