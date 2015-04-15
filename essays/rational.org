@@ -78,11 +78,11 @@
    - user relation has last_name
    - user relation's second row does not have first_name=Jim and last_name=Jones
 
-** provable
-   second row, the full_name method does not get you "Jim Jones"
+   provable:
+   - second row, the full_name method does not get you "Jim Jones"
 
-** not provable
-   exists a row, full_name = anything at all
+   not provable:
+   - exists a row, full_name = anything at all
 
 ** intersection of assumptions
   - ...
@@ -131,7 +131,7 @@
    - rails sets up a lot of stuff for tests automatically but those, things are well defined, `setup` methods also define assumptions.
    - search through the space of assumption sets to find minimal set where tests pass (i.e. proofs go through)
 
-* question
+* questions
   - which proofs get grouped? module/class/etc
   - how many assumptions should we include in the set? shouldn't get all the way down to one's and zeros
   - how do you turn mocked code into readable assumptions? example can be derived from test database queries
