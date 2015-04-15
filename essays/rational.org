@@ -5,17 +5,15 @@
   - embeds assumption of shifting, unpredictable environment
   - in fact we can prove the absence of bugs *under some very specific conditions/assumptions
 
-** mocks and tests tell us little in isolation, more 1in aggregate
+** mocks/tests: weak in isolation, strong in aggregate
    - they embed the programmers understanding the system
    - they provide some guarantees about behavior, however narrow
    - but how do we harness that information?
    - programmers reading tests have a narrow focus
 
-** mocks as assumptions
-   when we test using mocks we state our assumptions about context in terms of those mocks
-
-** tests as proofs under those assumptions
-   tests prove a very particular property under a very particular set of assumptions defined by the mocks
+** mocks as assumptions, tests as proofs
+   - when we test using mocks we state our assumptions about context in terms of those mocks
+   - tests prove a very particular property under a very particular set of assumptions defined by the mocks
 
 ** assumptions can tell us interesting things about a system
    - where should it be executing (posix, etc)
@@ -24,7 +22,6 @@
    - what data should always/sometimes/never exist
 
 * example
-
   e.g Rails "unit" tests
 
   |----+------------+-----------+-----|
