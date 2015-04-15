@@ -1,12 +1,10 @@
-* quotes
-  "Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
+* mocks as proof assumptions
+ "Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
 
   "Testing shows the presence, not the absence of bugs" - Edsger W. Dijkstra
+  - embeds assumption of shifting, unpredictable environment
+  - in fact we can prove the absence of bugs *under some very specific conditions/assumptions
 
-   - embeds assumption of shifting, unpredictable environment
-   - in fact we can prove the absence of bugs *under some very specific conditions/assumptions
-
-* ideas
 ** mocks and tests tell us little in isolation, more 1in aggregate
    - they embed the programmers understanding the system
    - they provide some guarantees about behavior, however narrow
