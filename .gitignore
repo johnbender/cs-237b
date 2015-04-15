@@ -2,3 +2,4 @@ essays/auto
 *.aux
 *.log
 *.pdf
+.DS_store
