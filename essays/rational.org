@@ -91,27 +91,27 @@
   - user relation has first_name
   - user relation has last_name
 
-  taking the union of shared assumptions provides a consistent context
-  elides test specific extra context (second row, first row, etc)
-  you could recover most of the schema from these assumptions
+  taking the intersection of shared assumptions provides a consistent context
+  and elides test specific extra context (second row, first row, etc).
+  one could recover most of the schema from these assumptions
 
   (side note) a good system for helping people learn about code
   should make it easy to rebuild that system (e.g. recover schema)
 
 ** union of assumptions
    given all the assumptions made for all the tests,
-   under the assumption they are consistent,
+   (under the assumption they are consistent)
    what can we prove now?
 
    provable:
-   exists a row, full_name != "Jim Jones"
-   exists a row, full_name = anything at all
+   - exists a row, full_name != "Jim Jones"
+   - exists a row, full_name = anything at all
 
 * proofs
   - best proofs are those that assume little and prove much
   - e.g pure functions assume little other than some constraint on inputs
 
-** proof theoretic view
+** proof theoretic view of minimality
    - minimum set of assumptions ==> most accurate view of context
    - tracking them through introduction (cut)
    - tracking them through removal (thinning)
@@ -125,6 +125,12 @@
    -------------- (thinning)
    T, phi |- psi
    #+end_src
+
+** example
+   - rails sets up a lot of stuff for tests automatically but those
+   things are well defined, `setup` methods also define assumptions.
+   - search through the space of assumption combinations to find minimal
+   set where tests pass (i.e. proofs go through)
 
 * question
   - which proofs get grouped? module/class/etc
