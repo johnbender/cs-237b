@@ -51,11 +51,11 @@
    - user relation has last_name
    - user relation's first row has first_name=Jim and last_name=Jones
 
-** provable
-   first row, the full_name method gets you "Jim Jones"
+   provable:
+   - first row, the full_name method gets you "Jim Jones"
 
-** not provable
-   exists a row, full_name != "Jim Jones"
+   not provable:
+   - exists a row, full_name != "Jim Jones"
 
 * extended example
 
@@ -82,7 +82,7 @@
    - second row, the full_name method does not get you "Jim Jones"
 
    not provable:
-   - exists a row, full_name = anything at all
+   - gexists a row, full_name = anything at all
 
 ** intersection of assumptions
   - ...
