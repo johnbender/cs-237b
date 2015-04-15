@@ -1,43 +1,45 @@
-* "Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
-* "Testing shows the presence, not the absence of bugs" - Edsger W. Dijkstra
-  embeds assumption of shifting, unpredictable environment
-  in fact we can prove the absence of bugs *under some very specific conditions/assumptions*
+* quotes
+** "Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
+** "Testing shows the presence, not the absence of bugs" - Edsger W. Dijkstra
+   embeds assumption of shifting, unpredictable environment
+   in fact we can prove the absence of bugs *under some very specific conditions/assumptions*
 
-* mocks and tests tell us little in isolation, more (lots?) in aggregate
-  they embed the programmers understanding the system
-  they provide some guarantees about behavior, however narrow
-  but how do we harness that information
+* ideas
+** mocks and tests tell us little in isolation, more (lots?) in aggregate
+   they embed the programmers understanding the system
+   they provide some guarantees about behavior, however narrow
+   but how do we harness that information
 
-  programmers reading tests have a narrow focus
+   programmers reading tests have a narrow focus
 
-* mocks as assumptions
-  when we test using mocks we state our assumptions about context in terms of those mocks
+** mocks as assumptions
+   when we test using mocks we state our assumptions about context in terms of those mocks
 
-* tests as proofs under those assumptions
-  tests prove a very particular property under a very particular set of assumptions defined by the mocks
-  extremely narrow set of conditions
+** tests as proofs under those assumptions
+   tests prove a very particular property under a very particular set of assumptions defined by the mocks
+   extremely narrow set of conditions
 
-* assumptions can tell us interesting things about a system
-  where should it be executing (posix, etc)
-  what data should does it want from external resources (content)
-  how should that data be delivered (format, async/sync, etc)
-  what data should always/sometimes/never exist
+** assumptions can tell us interesting things about a system
+   where should it be executing (posix, etc)
+   what data should does it want from external resources (content)
+   how should that data be delivered (format, async/sync, etc)
+   what data should always/sometimes/never exist
 
-* proofs
-  best proofs are those that assume little and prove much
-  e.g pure functions assume little other than some constraint on inputs
+** proofs
+   best proofs are those that assume little and prove much
+   e.g pure functions assume little other than some constraint on inputs
 
-* proof theoretic view of "better proofs"
+** proof theoretic view of "better proofs"
 
-  T |- phi   T, phi |- psi
-  ------------------------ (cut)
-  T |- psi
+   #+begin_src
+   T |- phi   T, phi |- psi
+   ------------------------ (cut)
+   T |- psi
 
-  T |- psi
-  -------------- (thinning)
-  T, phi |- psi
-
-  assuming nothing, T = {}, then phi must be an axiom/tautology or most importantly an *assumption*
+   T |- psi
+   -------------- (thinning)
+   T, phi |- psi
+   #+end_src
 
 * example
 
@@ -55,10 +57,13 @@
 
   Test
 
+  #+begin_src ruby
+  # positive
   def test_full_name
     user = User.find(1)
     assert_equal(user.full_name, "Jim Jones")
   end
+  #+end_src
 
 ** assumptions
    - ...
@@ -79,17 +84,13 @@
 
   testing the positive and the negative of a method is a standard approach
 
-  # positive
-  def test_full_name_one
-    user = User.find(1)
-    assert_equal(user.full_name, "Jim Jones")
-  end
-
+  #+begin_src ruby
   # negative
   def test_full_name_two
     user = User.find(2)
     assert(user.full_name != "Jim Jones")
   end
+  #+end_src
 
 ** assumptions
    - ...
