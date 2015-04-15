@@ -112,7 +112,9 @@
   - e.g pure functions assume little other than some constraint on inputs
 
 ** proof theoretic view
-   minimum set of assumptions ==> most accurate view of contextg
+   - minimum set of assumptions ==> most accurate view of context
+   - tracking them through introduction (cut)
+   - tracking them through removal (thinning)
 
    #+begin_src
    T |- phi   T, phi |- psi
@@ -125,7 +127,7 @@
    #+end_src
 
 * question
-  which proofs get grouped? module/class/etc
-  how many assumptions should we include in the set? shouldn't get all the way down to one's and zeros
-  how do you turn mocked code into readable assumptions? example can be derived from test database queries
-  hard to make general, depends on mocking framework?
+  - which proofs get grouped? module/class/etc
+  - how many assumptions should we include in the set? shouldn't get all the way down to one's and zeros
+  - how do you turn mocked code into readable assumptions? example can be derived from test database queries
+  - hard to make general, depends on mocking framework?
