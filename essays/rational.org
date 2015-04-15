@@ -6,6 +6,9 @@
   - in fact we can prove the absence of bugs *under some very specific conditions/assumptions*g
   - we approximate with "for all situations x, Q(x) ==> P" or "Q1(x), ... , Qn(x) |= P"
 
+  Knowing about mocks means knowing the assumptions of tests and knowing
+  the assumptions of tests means knowing the assumptions of the system about its context.
+
 ** mocks/tests: weak in isolation, strong in aggregate
    - they embed the programmers understanding the system
    - they provide some guarantees about behavior, however narrow
@@ -101,7 +104,7 @@
 
 ** union of assumptions
    given all the assumptions made for all the tests,
-   (under the assumption they are consistent)
+   (if they are consistent)
    what can we prove now?
 
    provable:
@@ -114,21 +117,16 @@
 
 ** proof theoretic view of minimal assumptions
    - minimum set of assumptions ==> most accurate view of context
-   - tracking them through introduction (cut)
-   - tracking them through removal (thinning)
+   - tracking them as the intersection of thinnings?
 
    #+begin_src
-   T |- phi   T, phi |- psi
-   ------------------------ (cut)
-   T |- psi
-
    T |- psi
    -------------- (thinning)
    T, phi |- psi
    #+end_src
 
 ** example
-   - rails sets up a lot of stuff for tests automatically but those, things are well defined, `setup` methods also define assumptions.
+   - rails sets up a lot of stuff for tests automatically but those things are well defined, `setup` methods also define assumptions.
    - search through the space of assumption sets to find minimal set where tests pass (i.e. proofs go through)
 
 * questions
