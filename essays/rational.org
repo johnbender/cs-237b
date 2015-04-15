@@ -1,13 +1,14 @@
 * "Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
-
 * "Testing shows the presence, not the absence of bugs" - Edsger W. Dijkstra
   embeds assumption of shifting, unpredictable environment
-  in fact we can prove the absence of bugs *under some assumptions*
+  in fact we can prove the absence of bugs *under some very specific conditions/assumptions*
 
 * mocks and tests tell us little in isolation, more (lots?) in aggregate
   they embed the programmers understanding the system
   they provide some guarantees about behavior, however narrow
   but how do we harness that information
+
+  programmers reading tests have a narrow focus
 
 * mocks as assumptions
   when we test using mocks we state our assumptions about context in terms of those mocks
@@ -25,6 +26,8 @@
 * proofs
   best proofs are those that assume little and prove much
   e.g pure functions assume little other than some constraint on inputs
+
+* proof theoretic view of "better proofs"
 
   T |- phi   T, phi |- psi
   ------------------------ (cut)
@@ -112,13 +115,13 @@
   - user relation has first_name
   - user relation has last_name
 
-* why
-  taking the union of shared assumptions provides a consistent context
-  elides test specific extra context (second row, first row, etc)
-  you could recover most of the schema from these assumptions
+** consistent context
+   taking the union of shared assumptions provides a consistent context
+   elides test specific extra context (second row, first row, etc)
+   you could recover most of the schema from these assumptions
 
-  (side note) a good system for helping people learn about code
-  should make it easy to rebuild that system
+   (side note) a good system for helping people learn about code
+   should make it easy to rebuild that system (e.g. recover schema)
 
 * union of assumptions
   given all the assumptions made for all the tests,
@@ -135,3 +138,4 @@
 ** shouldn't get all the way down to one's and zeros
 * how do you turn mocked code into readable assumptions
 ** in rails example can be derived from test database queries
+** hard to make general, depends on mocking framework?
