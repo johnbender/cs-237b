@@ -117,7 +117,7 @@
   - e.g pure functions assume little other than some constraint on inputs
 
 ** proof theoretic view
-   minimum set of assumptions ==> most accurate view of context
+   minimum set of assumptions ==> most accurate view of contextg
 
    #+begin_src
    T |- phi   T, phi |- psi
