@@ -97,15 +97,21 @@ Alternately we can provide tooling to see what happens when assignment to \ttf{f
 
 Interactive experimentation seems like a happy medium, especially if we just want to generate a bad execution. Based on what we know about the algorithm a good place to start moving things around is the store to \ttf{flag0} or \ttf{flag1}. Being able to ``grab'' the instructions and ``scrub'' them up and down the execution as illustrated while the computer checks for bad interleavings could mean quickly finding bad executions. Even if there is no specification. being able to view possible interleavings for bad state could still be valuable. Note that sifting through the possible executions will be necessary in this case.
 
-The programmer provides the key insight about which instructions are most likely to be critical for correct execution and then the computer can quickly try executions as she moves the instructions around. This avoids the burden of having to figure out which instructions have side effects that we should be concerned about. Returning to the analogy, the recipe creator knows more about the recipe and how the cake should be baked than anyone else, up to and including concerns about shared resources in the kitchen. For example, it's possible two cakes might be acceptable in the oven for certain types of cake.
+The programmer provides the key insight about which instructions are most likely to be critical for correct execution and then the computer can quickly try executions as she moves the instructions around. This avoids the burden of having to figure out which instructions have side effects that we should be concerned about.
 
-Also, viewing the side effects of the various executions and playing with the program state that results tells the programmer about the algorithm and how it will behave under a given weak memory model. This is true even if no ``bad'' executions are found. In our analogy, the recipe creator might wonder about the best order in which to make the batter and the icing in different kitchens. Simulating the behavior of two bakers for the recipe creators benefit could highlight some further improvements to how the baking happens in a given kitchen.
+Also, viewing the side effects of the various executions and playing with the program state that results tells the programmer about the algorithm and how it will behave under a given weak memory model. This is true even if no ``bad'' executions are found.
+
+\vspace{-0.25cm}
+\section{Drawbacks}
+\vspace{-0.25cm}
+
+This technique is made awkward by the requirement to provide or define the processes so that executions can be examined or displayed to the user. It's possible to infer them from the points at which a program forks off threads (e.g. \ttf{pthread\_create}). Threads created in loops might have to simplified to just the case of two threads to avoid information overload.
+
+There is also a distinction between the lines of code in C/C++ and the machine level instructions. The mapping can be retained using debugging information but helping the user identify the mapping between the code on the left and the bad execution of instructions on the right might be difficult or hard to understand.
 
 \vspace{-0.25cm}
 \section{Further Ideas}
 \vspace{-0.25cm}
-
-Scrubbing is a tool based approach to generating bad executions, but it's natural to ask if there are language features that might make reasoning about algorithms easier in the presence of weak memory models.
 
 Assuming some mechanism for tracking shared state access, a language-IDE combination could overlay all the possible points at which a given instruction could move to within the existing source if it's movement might be problematic. This might provide an early warning about undesirable behavior.
 
