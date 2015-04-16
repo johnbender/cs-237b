@@ -122,6 +122,10 @@
   - it's raining, if it's raining the sidewalk is wet, I know that the sidewalk is wet
   - it's raining, if it's raining the sidewalk is wet, oranges taste great, I know that the sidewalk is wet
 
+  Clearly the second is a weaker argument.
+  Minimizing assumptions brings clarity to the proof.
+  In the same way minimizing assumptions brings clarity to tests and the system.
+
   #+begin_src
   T |- psi
   -------------- (thinning)
