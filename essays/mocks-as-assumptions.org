@@ -100,7 +100,7 @@
 
   taking the intersection of shared assumptions provides a consistent context
   and elides test specific extra context (second row, first row, etc).
-  one could recover most of the schema from these assumptions
+  one could recover most of the schema from these assumptions.
 
   (side note) a good system for helping people learn about code
   should make it easy to rebuild that system (e.g. recover schema)
@@ -116,7 +116,11 @@
 
 * proof theoretic view
   We can track the use of each assumption as in proofs.
-  The intersection of all the elided assumptions is ones we don't care about.
+  The intersection of all the elided assumptions are the ones we don't care about.
+
+  which argument is better:
+  - it's raining, if it's raining the sidewalk is wet, I know that the sidewalk is wet
+  - it's raining, if it's raining the sidewalk is wet, oranges taste great, I know that the sidewalk is wet
 
   #+begin_src
   T |- psi
