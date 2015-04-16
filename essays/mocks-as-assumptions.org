@@ -1,3 +1,5 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+OPTIONS: ^:nil
 * mocks as proof assumptions
  "Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
 
@@ -28,12 +30,12 @@
 * example
   e.g Rails "unit" tests
 
-  |----+------------+-----------+-----|
-  | id | first_name | last_name | ... |
-  |----+------------+-----------+-----|
-  | 1  | Jim        | Jones     |     |
-  | 2  | Jackie     | Jormpjomp |     |
-  |----+------------+-----------+-----|
+  |----+------------+------------+-----|
+  | id | first_name | last_name  | ... |
+  |----+------------+------------+-----|
+  |  1 | Jim        | Jones      |     |
+  |  2 | Jackie     | Jormp-jomp |     |
+  |----+------------+------------+-----|
 
   Test
 
@@ -85,7 +87,7 @@
    - second row, the full_name method does not get you "Jim Jones"
 
    not provable:
-   - gexists a row, full_name = anything at all
+   - exists a row, full_name = anything at all
 
 ** intersection of assumptions
   - ...
@@ -117,7 +119,7 @@
 
 ** proof theoretic view of minimal assumptions
    - minimum set of assumptions ==> most accurate view of context
-   - tracking them as the `T \ {phi1, phi2,...}` where phi_n used in thinnings?
+   - tracking them as the `T \ {phi1, phi2,...}` where phi_ng used in thinnings?
 
    #+begin_src
    T |- psi
@@ -132,6 +134,7 @@
 
 * questions
   - which proofs get grouped? module/class/etc
+  - everything is an assumption up to a point, how can we limit the search space of requirements?
   - how many assumptions should we include in the set? shouldn't get all the way down to one's and zeros
   - how do you turn mocked code into readable assumptions? from example, can be derived from test database queries
   - hard to make general, depends on mocking framework?
