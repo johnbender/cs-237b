@@ -1,8 +1,21 @@
+body {
+  width: 820px;
+  padding: 20px;
+}
+
 #content {
+  margin-right: 20px;
+}
+
+#content, #right-content {
   width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 20px;
+  float: left;
   font-size: 12px;
+}
+
+#postamble {
+  display: none;
 }
 
 h1, h2, h3, h4, p, ul {

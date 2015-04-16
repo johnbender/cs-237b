@@ -3,8 +3,8 @@
 * mocks as proof assumptions
   "Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
 
-  Mocks are like proof assumptions for very weak proofs. They assume much and prove little.
-  But! Because so much is assumed we can learn about system context from those assumptions.
+  Mocks are like proof assumptions for very weak proofs (test). They assume much and prove little.
+  But! Because so much is assumed we can learn about the expected system context from those assumptions.
   To wit, knowing about mocks means knowing the assumptions of a test.
   Knowing the assumptions of a test means knowing about expected system context.
   If we can gather the assumptions of tests encoded by mocks we can understand context.
