@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>mocks-as-assumptions</title>
+<!-- 2015-04-15 Wed 22:15 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="John Bender" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">mocks-as-assumptions</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. mocks as proof assumptions</a>
+<ul>
+<li><a href="#sec-1-1">1.1. mocks/tests: weak in isolation, strong in aggregate</a></li>
+<li><a href="#sec-1-2">1.2. mocks as assumptions, tests as proofs</a></li>
+<li><a href="#sec-1-3">1.3. assumptions can tell us interesting things about a system</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. example</a>
+<ul>
+<li><a href="#sec-2-1">2.1. assumptions</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. example</a>
+<ul>
+<li><a href="#sec-3-1">3.1. assumptions</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. working with assumptions</a>
+<ul>
+<li><a href="#sec-4-1">4.1. intersection of assumptions</a></li>
+<li><a href="#sec-4-2">4.2. union of assumptions</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5. proof theoretic view</a></li>
+<li><a href="#sec-6">6. questions</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> mocks as proof assumptions</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+"Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
+</p>
+
+<p>
+Mocks are like proof assumptions for very weak proofs. They assume much and prove little.
+But! Because so much is assumed we can learn about system context from those assumptions.
+To wit, knowing about mocks means knowing the assumptions of a test.
+Knowing the assumptions of a test means knowing about expected system context.
+If we can gather the assumptions of tests encoded by mocks we can understand context.
+</p>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> mocks/tests: weak in isolation, strong in aggregate</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>they embed the programmers understanding the system
+</li>
+<li>they provide some guarantees about behavior, however narrow
+</li>
+<li>but how do we harness that information?
+</li>
+<li>programmers reading tests have a narrow focus
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> mocks as assumptions, tests as proofs</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>when we test using mocks we state our assumptions about context in terms of those mocks
+</li>
+<li>tests prove a very particular property under a very particular set of assumptions defined by the mocks
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> assumptions can tell us interesting things about a system</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>where should it be executing (posix, etc)
+</li>
+<li>what data does it want from external resources (content)
+</li>
+<li>how should that data be delivered (format, async/sync, etc)
+</li>
+<li>what data should always/sometimes/never exist
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> example</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Rails "unit" tests assume quite a bit but the tests tell you little:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-ruby"><span style="color: #00ffff; font-style: italic;"># </span><span style="color: #00ffff; font-style: italic;">positive test</span>
+<span style="color: #00cd00;">def</span> <span style="color: #0000ee;">test_full_name</span>
+  user = <span style="color: #cdcd00;">User</span>.find(1)
+  assert_equal(user.full_name, <span style="color: #00cdcd;">"Jim Jones"</span>)
+<span style="color: #00cd00;">end</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> assumptions</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>&#x2026;
+</li>
+<li>database exists/accessible
+</li>
+<li>user relation exists
+</li>
+<li>user relation has at least one tuple
+</li>
+<li>user relation has first_name
+</li>
+<li>user relation has last_name
+</li>
+<li>user relation's first row has first_name=Jim and last_name=Jones
+</li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">id</th>
+<th scope="col" class="left">first_name</th>
+<th scope="col" class="left">last_name</th>
+<th scope="col" class="left">&#x2026;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">1</td>
+<td class="left">Jim</td>
+<td class="left">Jones</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">??</td>
+<td class="left">??</td>
+<td class="left">??</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+provable: first row, the full_name method gets you "Jim Jones"
+</p>
+
+<p>
+not provable: exists a row, full_name != "Jim Jones"
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> example</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Addition of negative test tells us more:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-ruby"><span style="color: #00ffff; font-style: italic;"># </span><span style="color: #00ffff; font-style: italic;">negative</span>
+<span style="color: #00cd00;">def</span> <span style="color: #0000ee;">test_full_name_not</span>
+  user = <span style="color: #cdcd00;">User</span>.find(2)
+  assert(user.full_name != <span style="color: #00cdcd;">"Jim Jones"</span>)
+<span style="color: #00cd00;">end</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> assumptions</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>&#x2026;
+</li>
+<li>database exists/accessible
+</li>
+<li>user relation exists
+</li>
+<li>user relation has at least one tuple
+</li>
+<li>user relation has first_name
+</li>
+<li>user relation has last_name
+</li>
+<li>user relation's second row does not have first_name=Jim and last_name=Jones
+</li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="right">id</th>
+<th scope="col" class="left">first_name</th>
+<th scope="col" class="left">last_name</th>
+<th scope="col" class="left">&#x2026;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="right">1</td>
+<td class="left">??</td>
+<td class="left">??</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="left">??</td>
+<td class="left">??</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+provable: second row, the full_name method does not get you "Jim Jones"
+</p>
+
+<p>
+not provable: exists a row, full_name = anything at all
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> working with assumptions</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Now that we know some of the assumptions how can we use them to learn about the system?
+</p>
+</div>
+
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> intersection of assumptions</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>&#x2026;
+</li>
+<li>database exists/accessible
+</li>
+<li>user relation exists
+</li>
+<li>user relation has at least one tuple
+</li>
+<li>user relation has first_name
+</li>
+<li>user relation has last_name
+</li>
+</ul>
+
+<p>
+taking the intersection of shared assumptions provides a consistent context
+and elides test specific extra context (second row, first row, etc).
+one could recover most of the schema from these assumptions
+</p>
+
+<p>
+(side note) a good system for helping people learn about code
+should make it easy to rebuild that system (e.g. recover schema)
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> union of assumptions</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+given all the assumptions made for all the tests,
+(if they are consistent)
+what can we prove now?
+</p>
+
+<p>
+provable:
+</p>
+<ul class="org-ul">
+<li>exists a row, full_name != "Jim Jones"
+</li>
+<li>exists a row, full_name = anything at all
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> proof theoretic view</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+We can track the use of each assumption as in proofs.
+The intersection of all the elided assumptions is ones we don't care about.
+</p>
+
+<pre class="example">
+T |- psi
+-------------- (thinning)
+T, phi |- psi
+</pre>
+
+<p>
+Often programmers use setup methods as a dumping ground for mocking test setup which confuses context.
+Rails sets up a lot of stuff for tests automatically but those things are well defined,
+`setup` methods also define assumptions. We can search through the space of assumption sets to
+find minimal set where tests pass (i.e. proofs go through).
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> questions</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>which proofs get grouped? module/class/etc
+</li>
+<li>everything is an assumption up to a point, how can we limit the search space of requirements?
+</li>
+<li>how many assumptions should we include in the set? shouldn't get all the way down to one's and zeros
+</li>
+<li>how do you turn mocked code into readable assumptions? from example, can be derived from test database queries
+</li>
+<li>hard to make general, depends on mocking framework?
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: John Bender</p>
+<p class="date">Created: 2015-04-15 Wed 22:15</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
