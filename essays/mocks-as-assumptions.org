@@ -36,6 +36,11 @@
   end
   #+end_src
 
+  Note that `user.full_name` can be either a method invocation or
+  property access in Ruby. If this were JavaScript you could assume
+  property access and then the assumptions about the schema would be different.
+  Again, context matters.
+
 ** assumptions
    - ...
    - database exists/accessible
@@ -52,9 +57,9 @@
   | ?? | ??         | ??        |     |
   |----+------------+-----------+-----|
 
-   provable: first row, the full_name method gets you "Jim Jones"
+   provable: first row such that the full_name method gets you "Jim Jones"
 
-   not provable: exists a row, full_name != "Jim Jones"
+   not provable: exists a row such that full_name != "Jim Jones"
 
 * example
   Addition of negative test tells us more:
@@ -63,7 +68,7 @@
   # negative
   def test_full_name_not
     user = User.find(2)
-    assert(user.full_name != "Jim Jones")
+    assert_not_equal(user.full_name, "Jim Jones")
   end
   #+end_src
 
@@ -83,9 +88,9 @@
   |  2 | ??         | ??        |     |
   |----+------------+-----------+-----|
 
-   provable: second row, the full_name method does not get you "Jim Jones"
+   provable: second row such that the full_name method does not get you "Jim Jones"
 
-   not provable: exists a row, full_name = anything at all
+   not provable: exists a row such that full_name = anything at all
 
 * working with assumptions
   Now that we know some of the assumptions how can we use them to learn about the system?
@@ -111,8 +116,8 @@
    what can we prove now?
 
    provable:
-   - exists a row, full_name != "Jim Jones"
-   - exists a row, full_name = anything at all
+   - exists a row such that full_name != "Jim Jones"
+   - exists a row such that full_name = anything at all
 
 * proof theoretic view
   We can track the use of each assumption as in proofs.
