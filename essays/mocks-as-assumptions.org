@@ -29,7 +29,7 @@
    - what data should always/sometimes/never exist
 
 * example
-  Consider the following test from the perspective of someone who doesn't know Ruby particularly well or Rails.
+  Consider the following test from the perspective of someone who doesn't know Ruby particularly well or Rails, and might be new to the project.
 
   #+begin_src ruby
   # positive test
@@ -39,46 +39,35 @@
   end
   #+end_src
 
-  Confusion can arise from the ambiguous nature of `full_name`. It can be a property or an attribute. But because the test writer may have mocked/stubbed classes/methods other than `full_name` we can inspect them to provide context to the test reader.
+  Confusion can arise from the ambiguous nature of `full_name`. It can be a property or an attribute. But because the test writer may have mocked/stubbed classes/methods other than `full_name` we can inspect them to provide context to the test reader. Here we assume that the database is not managed by the framework but rather that the original test author stubbed the `find` method.
 
   #+begin_src ruby
   def User.find(id)
     if id == 1
       User.new( first_name: "Jim", last_name: "Jones" )
-    else
-      User.new( first_name: "Jack", last_name: "Jomp" )
     end
   end
   #+end_src
+
 
   The stubbed method `find` tells us many things about the test writer's assumptions. Most obviously `full_name` must do some string concatenation to produce the expected result so we can safely assume it behaves as a method.
 
   In fact there are many assumptions that we can derive from the stubbed `find` method and they can tell us interesting things about the expected context for the test.
 
 ** assumptions
-   - ...
-   - database exists/accessible
-   - user relation exists
-   - user relation has at least one tuple
-   - user relation has first_name
-   - user relation has last_name
-   - user relation's first row has first_name=Jim and last_name=Jones
+   - user has at least one object
+   - user has first_name
+   - user has last_name
+   - one user has first_name=Jim and last_name=Jones
 
-  |----+------------+-----------+-----|
-  | id | first_name | last_name | ... |
-  |----+------------+-----------+-----|
-  | 1  | Jim        | Jones     |     |
-  | ?? | ??         | ??        |     |
-  |----+------------+-----------+-----|
+   With these assumptions in mind we can also speak to what is and is not provable:
 
-  With these assumptions in mind we can also speak to what is and is not provable:
+   provable: first user, full_name method gets you "Jim Jones"
 
-   provable: first row such that the full_name method gets you "Jim Jones"
-
-   not provable: exists a row such that full_name != "Jim Jones"
+   not provable: exists another user such that full_name != "Jim Jones"
 
 * example
-  Next consider the negative test along side the original positive test:
+  Next consider the negative test along side the original positive test with a separate stub for `find`.
 
   #+begin_src ruby
   # negative
@@ -86,56 +75,62 @@
     user = User.find(2)
     assert_not_equal(user.full_name, "Jim Jones")
   end
+
+  # ...
+
+  def User.find(id)
+    if id == 2
+      User.new( first_name: "Jack", last_name: "Jormp" )
+    end
+  end
   #+end_src
 
-  This also comes with a set of assumption associated with the mocked and stubbed object. The common set of assumptions provides useful context for the test.
+  This also comes with a set of assumption associated with the mocked and stubbed object.
 
 ** assumptions
-   - ...
-   - database exists/accessible
-   - user relation exists
-   - user relation has at least one tuple
-   - user relation has first_name
-   - user relation has last_name
-   - user relation's second row does not have first_name=Jim and last_name=Jones
+   - user has at least one object
+   - user has first_name
+   - user has last_name
+   - one user has first_name=Jack and last_name=Jormp
 
-  |----+------------+-----------+-----|
-  | id | first_name | last_name | ... |
-  |----+------------+-----------+-----|
-  |  1 | ??         | ??        |     |
-  |  2 | ??         | ??        |     |
-  |----+------------+-----------+-----|
-
-   provable: second row such that the full_name method does not get you "Jim Jones"
+   provable: second user, such that the full_name method does not get you "Jim Jones"
 
    not provable: exists a row such that full_name = anything at all
 
 * working with assumptions
-  Now that we know some of the assumptions how can we use them to learn about the system?
+
+  We can now take the aggregate of these assumptions and use them to both establish a consistent context for the two tests **and** infer new things that were not provable before.
 
 ** intersection of assumptions
-  - ...
-  - database exists/accessible
-  - user relation exists
-  - user relation has at least one tuple
-  - user relation has first_name
-  - user relation has last_name
+   - user has at least one object
+   - user has first_name
+   - user has last_name
 
-  taking the intersection of shared assumptions provides a consistent context
+  Taking the intersection of shared assumptions provides a consistent context
   and elides test specific extra context (second row, first row, etc).
   one could recover most of the schema from these assumptions.
+  That is we can derive documentation about the system from the assumed context.
+  This would be useful for new users of the system.
 
   (side note) a good system for helping people learn about code
   should make it easy to rebuild that system (e.g. recover schema)
 
 ** union of assumptions
-   given all the assumptions made for all the tests,
-   (if they are consistent)
-   what can we prove now?
+   Given all the assumptions made for all the tests,  (assuming they are consistent)
+   what can we prove?
 
    provable:
    - exists a row such that full_name != "Jim Jones"
    - exists a row such that full_name = anything at all
+
+* Consistency
+
+   The system must be consistent in the test assumptions.
+   If there is a contradiction then anything can be proved.
+   For example if a test assumes that the first user object is
+   some very specific seed data like a super-user
+   but then another tests assumes that it's a normal user,
+   clearly the assumptions of the testers are in conflict.
 
 * proof theoretic view
   We can track the use of each assumption as in proofs.
@@ -159,10 +154,3 @@
   Rails sets up a lot of stuff for tests automatically but those things are well defined,
   `setup` methods also define assumptions. We can search through the space of assumption sets to
   find minimal set where tests pass (i.e. proofs go through).
-
-* questions
-  - which proofs get grouped? module/class/etc
-  - everything is an assumption up to a point, how can we limit the search space of requirements?
-  - how many assumptions should we include in the set? shouldn't get all the way down to one's and zeros
-  - how do you turn mocked code into readable assumptions? from example, can be derived from test database queries
-  - hard to make general, depends on mocking framework?

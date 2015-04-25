@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>mocks-as-assumptions</title>
-<!-- 2015-04-25 Sat 09:24 -->
+<!-- 2015-04-25 Sat 12:13 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="John Bender" />
@@ -166,8 +166,8 @@ for the JavaScript code in this tag.
 <li><a href="#sec-4-2">4.2. union of assumptions</a></li>
 </ul>
 </li>
-<li><a href="#sec-5">5. proof theoretic view</a></li>
-<li><a href="#sec-6">6. questions</a></li>
+<li><a href="#sec-5">5. Consistency</a></li>
+<li><a href="#sec-6">6. proof theoretic view</a></li>
 </ul>
 </div>
 </div>
@@ -243,7 +243,7 @@ If we can gather the assumptions of tests encoded by mocks we can understand con
 <h2 id="sec-2"><span class="section-number-2">2</span> example</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-Consider the following test from the perspective of someone who doesn't know Ruby particularly well or Rails.
+Consider the following test from the perspective of someone who doesn't know Ruby particularly well or Rails, and might be new to the project.
 </p>
 
 <div class="org-src-container">
@@ -257,7 +257,7 @@ Consider the following test from the perspective of someone who doesn't know Rub
 </div>
 
 <p>
-Confusion can arise from the ambiguous nature of `full_name`. It can be a property or an attribute. But because the test writer may have mocked/stubbed classes/methods other than `full_name` we can inspect them to provide context to the test reader.
+Confusion can arise from the ambiguous nature of `full_name`. It can be a property or an attribute. But because the test writer may have mocked/stubbed classes/methods other than `full_name` we can inspect them to provide context to the test reader. Here we assume that the database is not managed by the framework but rather that the original test author stubbed the `find` method.
 </p>
 
 <div class="org-src-container">
@@ -265,12 +265,11 @@ Confusion can arise from the ambiguous nature of `full_name`. It can be a proper
 <pre class="src src-ruby"><span style="color: #00cd00;">def</span> <span style="color: #cdcd00;">User</span>.<span style="color: #0000ee;">find</span>(id)
   <span style="color: #00cd00;">if</span> id == 1
     <span style="color: #cdcd00;">User</span>.new( <span style="color: #00cdcd;">first_name</span>: <span style="color: #00cdcd;">"Jim"</span>, <span style="color: #00cdcd;">last_name</span>: <span style="color: #00cdcd;">"Jones"</span> )
-  <span style="color: #00cd00;">else</span>
-    <span style="color: #cdcd00;">User</span>.new( <span style="color: #00cdcd;">first_name</span>: <span style="color: #00cdcd;">"Jack"</span>, <span style="color: #00cdcd;">last_name</span>: <span style="color: #00cdcd;">"Jomp"</span> )
   <span style="color: #00cd00;">end</span>
 <span style="color: #00cd00;">end</span>
 </pre>
 </div>
+
 
 <p>
 The stubbed method `find` tells us many things about the test writer's assumptions. Most obviously `full_name` must do some string concatenation to produce the expected result so we can safely assume it behaves as a method.
@@ -285,69 +284,26 @@ In fact there are many assumptions that we can derive from the stubbed `find` me
 <h3 id="sec-2-1"><span class="section-number-3">2.1</span> assumptions</h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
-<li>&#x2026;
+<li>user has at least one object
 </li>
-<li>database exists/accessible
+<li>user has first_name
 </li>
-<li>user relation exists
+<li>user has last_name
 </li>
-<li>user relation has at least one tuple
-</li>
-<li>user relation has first_name
-</li>
-<li>user relation has last_name
-</li>
-<li>user relation's first row has first_name=Jim and last_name=Jones
+<li>one user has first_name=Jim and last_name=Jones
 </li>
 </ul>
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="left" />
-
-<col  class="left" />
-
-<col  class="left" />
-
-<col  class="left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="left">id</th>
-<th scope="col" class="left">first_name</th>
-<th scope="col" class="left">last_name</th>
-<th scope="col" class="left">&#x2026;</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="left">1</td>
-<td class="left">Jim</td>
-<td class="left">Jones</td>
-<td class="left">&#xa0;</td>
-</tr>
-
-<tr>
-<td class="left">??</td>
-<td class="left">??</td>
-<td class="left">??</td>
-<td class="left">&#xa0;</td>
-</tr>
-</tbody>
-</table>
 
 <p>
 With these assumptions in mind we can also speak to what is and is not provable:
 </p>
 
 <p>
-provable: first row such that the full_name method gets you "Jim Jones"
+provable: first user, full_name method gets you "Jim Jones"
 </p>
 
 <p>
-not provable: exists a row such that full_name != "Jim Jones"
+not provable: exists another user such that full_name != "Jim Jones"
 </p>
 </div>
 </div>
@@ -357,7 +313,7 @@ not provable: exists a row such that full_name != "Jim Jones"
 <h2 id="sec-3"><span class="section-number-2">3</span> example</h2>
 <div class="outline-text-2" id="text-3">
 <p>
-Next consider the negative test along side the original positive test:
+Next consider the negative test along side the original positive test with a separate stub for `find`.
 </p>
 
 <div class="org-src-container">
@@ -367,11 +323,19 @@ Next consider the negative test along side the original positive test:
   user = <span style="color: #cdcd00;">User</span>.find(2)
   assert_not_equal(user.full_name, <span style="color: #00cdcd;">"Jim Jones"</span>)
 <span style="color: #00cd00;">end</span>
+
+<span style="color: #00ffff; font-style: italic;"># </span><span style="color: #00ffff; font-style: italic;">...</span>
+
+<span style="color: #00cd00;">def</span> <span style="color: #cdcd00;">User</span>.<span style="color: #0000ee;">find</span>(id)
+  <span style="color: #00cd00;">if</span> id == 2
+    <span style="color: #cdcd00;">User</span>.new( <span style="color: #00cdcd;">first_name</span>: <span style="color: #00cdcd;">"Jack"</span>, <span style="color: #00cdcd;">last_name</span>: <span style="color: #00cdcd;">"Jormp"</span> )
+  <span style="color: #00cd00;">end</span>
+<span style="color: #00cd00;">end</span>
 </pre>
 </div>
 
 <p>
-This also comes with a set of assumption associated with the mocked and stubbed object. The common set of assumptions provides useful context for the test.
+This also comes with a set of assumption associated with the mocked and stubbed object.
 </p>
 </div>
 
@@ -379,61 +343,18 @@ This also comes with a set of assumption associated with the mocked and stubbed 
 <h3 id="sec-3-1"><span class="section-number-3">3.1</span> assumptions</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
-<li>&#x2026;
+<li>user has at least one object
 </li>
-<li>database exists/accessible
+<li>user has first_name
 </li>
-<li>user relation exists
+<li>user has last_name
 </li>
-<li>user relation has at least one tuple
-</li>
-<li>user relation has first_name
-</li>
-<li>user relation has last_name
-</li>
-<li>user relation's second row does not have first_name=Jim and last_name=Jones
+<li>one user has first_name=Jack and last_name=Jormp
 </li>
 </ul>
 
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="right" />
-
-<col  class="left" />
-
-<col  class="left" />
-
-<col  class="left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="right">id</th>
-<th scope="col" class="left">first_name</th>
-<th scope="col" class="left">last_name</th>
-<th scope="col" class="left">&#x2026;</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="right">1</td>
-<td class="left">??</td>
-<td class="left">??</td>
-<td class="left">&#xa0;</td>
-</tr>
-
-<tr>
-<td class="right">2</td>
-<td class="left">??</td>
-<td class="left">??</td>
-<td class="left">&#xa0;</td>
-</tr>
-</tbody>
-</table>
-
 <p>
-provable: second row such that the full_name method does not get you "Jim Jones"
+provable: second user, such that the full_name method does not get you "Jim Jones"
 </p>
 
 <p>
@@ -447,7 +368,7 @@ not provable: exists a row such that full_name = anything at all
 <h2 id="sec-4"><span class="section-number-2">4</span> working with assumptions</h2>
 <div class="outline-text-2" id="text-4">
 <p>
-Now that we know some of the assumptions how can we use them to learn about the system?
+We can now take the aggregate of these assumptions and use them to both establish a consistent context for the two tests <b><b>and</b></b> infer new things that were not provable before.
 </p>
 </div>
 
@@ -455,24 +376,20 @@ Now that we know some of the assumptions how can we use them to learn about the 
 <h3 id="sec-4-1"><span class="section-number-3">4.1</span> intersection of assumptions</h3>
 <div class="outline-text-3" id="text-4-1">
 <ul class="org-ul">
-<li>&#x2026;
+<li>user has at least one object
 </li>
-<li>database exists/accessible
+<li>user has first_name
 </li>
-<li>user relation exists
-</li>
-<li>user relation has at least one tuple
-</li>
-<li>user relation has first_name
-</li>
-<li>user relation has last_name
+<li>user has last_name
 </li>
 </ul>
 
 <p>
-taking the intersection of shared assumptions provides a consistent context
+Taking the intersection of shared assumptions provides a consistent context
 and elides test specific extra context (second row, first row, etc).
 one could recover most of the schema from these assumptions.
+That is we can derive documentation about the system from the assumed context.
+This would be useful for new users of the system.
 </p>
 
 <p>
@@ -486,9 +403,8 @@ should make it easy to rebuild that system (e.g. recover schema)
 <h3 id="sec-4-2"><span class="section-number-3">4.2</span> union of assumptions</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
-given all the assumptions made for all the tests,
-(if they are consistent)
-what can we prove now?
+Given all the assumptions made for all the tests,  (assuming they are consistent)
+what can we prove?
 </p>
 
 <p>
@@ -505,8 +421,22 @@ provable:
 </div>
 
 <div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> proof theoretic view</h2>
+<h2 id="sec-5"><span class="section-number-2">5</span> Consistency</h2>
 <div class="outline-text-2" id="text-5">
+<p>
+The system must be consistent in the test assumptions.
+If there is a contradiction then anything can be proved.
+For example if a test assumes that the first user object is
+some very specific seed data like a super-user
+but then another tests assumes that it's a normal user,
+clearly the assumptions of the testers are in conflict.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> proof theoretic view</h2>
+<div class="outline-text-2" id="text-6">
 <p>
 We can track the use of each assumption as in proofs.
 The intersection of all the elided assumptions are the ones we don't care about.
@@ -542,28 +472,10 @@ find minimal set where tests pass (i.e. proofs go through).
 </p>
 </div>
 </div>
-
-<div id="outline-container-sec-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> questions</h2>
-<div class="outline-text-2" id="text-6">
-<ul class="org-ul">
-<li>which proofs get grouped? module/class/etc
-</li>
-<li>everything is an assumption up to a point, how can we limit the search space of requirements?
-</li>
-<li>how many assumptions should we include in the set? shouldn't get all the way down to one's and zeros
-</li>
-<li>how do you turn mocked code into readable assumptions? from example, can be derived from test database queries
-</li>
-<li>hard to make general, depends on mocking framework?
-</li>
-</ul>
-</div>
-</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: John Bender</p>
-<p class="date">Created: 2015-04-25 Sat 09:24</p>
+<p class="date">Created: 2015-04-25 Sat 12:13</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
