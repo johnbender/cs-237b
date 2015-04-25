@@ -9,8 +9,8 @@
   Knowing the assumptions of a test means knowing about expected system context.
   If we can gather the assumptions of tests encoded by mocks we can understand context.
 
-  - Input: A set of tests, Mocks for those tests.
-  - Output: A human readable set of assumptions derived from the mocks for those test.
+  - Input: A set of tests and mocks/stubs for those tests written during the natural course of testing.
+  - Output: A human readable set of assumptions derived from the mocks for those tests.
 
 ** mocks/tests: weak in isolation, strong in aggregate
    - they embed the programmers understanding the system
@@ -53,7 +53,7 @@
 
   The stubbed method `find` tells us many things about the test writer's assumptions. Most obviously `full_name` must do some string concatenation to produce the expected result so we can safely assume it behaves as a method.
 
-  In fact there are many assumptions that we can derive from the stubbed `find` method.
+  In fact there are many assumptions that we can derive from the stubbed `find` method and they can tell us interesting things about the expected context for the test.
 
 ** assumptions
    - ...
