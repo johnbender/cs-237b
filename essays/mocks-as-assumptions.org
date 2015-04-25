@@ -9,6 +9,9 @@
   Knowing the assumptions of a test means knowing about expected system context.
   If we can gather the assumptions of tests encoded by mocks we can understand context.
 
+  - Input: A set of tests, Mocks for those tests.
+  - Output: A human readable set of assumptions derived from the mocks for those test.
+
 ** mocks/tests: weak in isolation, strong in aggregate
    - they embed the programmers understanding the system
    - they provide some guarantees about behavior, however narrow
@@ -26,7 +29,7 @@
    - what data should always/sometimes/never exist
 
 * example
-  Rails "unit" tests assume quite a bit but the tests tell you little:
+  Consider the following test from the perspective of someone who doesn't know Ruby particularly well or Rails.
 
   #+begin_src ruby
   # positive test
@@ -36,10 +39,21 @@
   end
   #+end_src
 
-  Note that `user.full_name` can be either a method invocation or
-  property access in Ruby. If this were JavaScript you could assume
-  property access and then the assumptions about the schema would be different.
-  Again, context matters.
+  Confusion can arise from the ambiguous nature of `full_name`. It can be a property or an attribute. But because the test writer may have mocked/stubbed classes/methods other than `full_name` we can inspect them to provide context to the test reader.
+
+  #+begin_src ruby
+  def User.find(id)
+    if id == 1
+      User.new( first_name: "Jim", last_name: "Jones" )
+    else
+      User.new( first_name: "Jack", last_name: "Jomp" )
+    end
+  end
+  #+end_src
+
+  The stubbed method `find` tells us many things about the test writer's assumptions. Most obviously `full_name` must do some string concatenation to produce the expected result so we can safely assume it behaves as a method.
+
+  In fact there are many assumptions that we can derive from the stubbed `find` method.
 
 ** assumptions
    - ...
@@ -57,12 +71,14 @@
   | ?? | ??         | ??        |     |
   |----+------------+-----------+-----|
 
+  With these assumptions in mind we can also speak to what is and is not provable:
+
    provable: first row such that the full_name method gets you "Jim Jones"
 
    not provable: exists a row such that full_name != "Jim Jones"
 
 * example
-  Addition of negative test tells us more:
+  Next consider the negative test along side the original positive test:
 
   #+begin_src ruby
   # negative
@@ -71,6 +87,8 @@
     assert_not_equal(user.full_name, "Jim Jones")
   end
   #+end_src
+
+  This also comes with a set of assumption associated with the mocked and stubbed object. The common set of assumptions provides useful context for the test.
 
 ** assumptions
    - ...
