@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>mocks-as-assumptions</title>
-<!-- 2015-04-25 Sat 12:13 -->
+<!-- 2015-04-27 Mon 14:27 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="John Bender" />
@@ -166,8 +166,9 @@ for the JavaScript code in this tag.
 <li><a href="#sec-4-2">4.2. union of assumptions</a></li>
 </ul>
 </li>
-<li><a href="#sec-5">5. Consistency</a></li>
-<li><a href="#sec-6">6. proof theoretic view</a></li>
+<li><a href="#sec-5">5. library/language extension</a></li>
+<li><a href="#sec-6">6. consistency</a></li>
+<li><a href="#sec-7">7. proof theoretic view</a></li>
 </ul>
 </div>
 </div>
@@ -421,8 +422,31 @@ provable:
 </div>
 
 <div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> Consistency</h2>
+<h2 id="sec-5"><span class="section-number-2">5</span> library/language extension</h2>
 <div class="outline-text-2" id="text-5">
+<p>
+Use closure to delineate mocks and everything else which often appear adjacent
+in the tests when the mocks are test specific.
+By construction (since setup is shared), those adjacent mocks are where
+inconsistencies would appear or where assumptions needed to prove more
+interesting properties would appear.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-ruby"><span style="color: #00ffff; font-style: italic;"># </span><span style="color: #00ffff; font-style: italic;">assumptions</span>
+not_setup <span style="color: #00cd00;">do</span>
+  assert( ... )
+<span style="color: #00cd00;">end</span>
+<span style="color: #00ffff; font-style: italic;"># </span><span style="color: #00ffff; font-style: italic;">assumptions</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> consistency</h2>
+<div class="outline-text-2" id="text-6">
 <p>
 The system must be consistent in the test assumptions.
 If there is a contradiction then anything can be proved.
@@ -434,9 +458,9 @@ clearly the assumptions of the testers are in conflict.
 </div>
 </div>
 
-<div id="outline-container-sec-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> proof theoretic view</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> proof theoretic view</h2>
+<div class="outline-text-2" id="text-7">
 <p>
 We can track the use of each assumption as in proofs.
 The intersection of all the elided assumptions are the ones we don't care about.
@@ -475,7 +499,7 @@ find minimal set where tests pass (i.e. proofs go through).
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: John Bender</p>
-<p class="date">Created: 2015-04-25 Sat 12:13</p>
+<p class="date">Created: 2015-04-27 Mon 14:27</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

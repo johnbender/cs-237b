@@ -123,14 +123,30 @@
    - exists a row such that full_name != "Jim Jones"
    - exists a row such that full_name = anything at all
 
-* Consistency
+* library/language extension
 
-   The system must be consistent in the test assumptions.
-   If there is a contradiction then anything can be proved.
-   For example if a test assumes that the first user object is
-   some very specific seed data like a super-user
-   but then another tests assumes that it's a normal user,
-   clearly the assumptions of the testers are in conflict.
+  Use closure to delineate mocks and everything else which often appear adjacent
+  in the tests when the mocks are test specific.
+  By construction (since setup is shared), those adjacent mocks are where
+  inconsistencies would appear or where assumptions needed to prove more
+  interesting properties would appear.
+
+  #+begin_src ruby
+  # assumptions
+  not_setup do
+    assert( ... )
+  end
+  # assumptions
+  #+end_src
+
+* consistency
+
+  The system must be consistent in the test assumptions.
+  If there is a contradiction then anything can be proved.
+  For example if a test assumes that the first user object is
+  some very specific seed data like a super-user
+  but then another tests assumes that it's a normal user,
+  clearly the assumptions of the testers are in conflict.
 
 * proof theoretic view
   We can track the use of each assumption as in proofs.
