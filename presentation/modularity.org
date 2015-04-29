@@ -1,26 +1,96 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../assets/style.css" />
+#+OPTIONS: ^:nil
+
 * purpose
-  establishing criteria by which a modularization can be constructed/measured
+  establishing criteria by which a modularization can be constructed/evaluated
 
 * example
   Vagrant, manipulating a common object structure (virtual machine) using some config.
-  Initially consider three modifications to the vm:
+  Consider three modifications to the vm (there are many more):
   - change memory allocation
   - add shared folder
   - local networking configuration
 
+  others: https://github.com/mitchellh/vagrant/blob/master/plugins/providers/virtualbox/action.rb#L51
+
   Three different approaches:
   - composed steps (procedure/function composition)
-    how do we handle cleanup on exception?
-    lots of expectation about vm and config
+    #+begin_src ruby
+    def vm_mod(vm, config)
+      vm_change_mem(vm, config)
+      vm_shared_folder(vm, config)
+      vm_local_network(vm, config)
+    end
+
+    vm_mod(vm, config)
+    #+end_src
+
+    - cleanup on exception?
+    - expectation about vm and config
+
   - information hiding (VM class)
-    bloated class
-    many responsibilities
-    does a sequence of method calls compose? (internal state)
+    #+begin_src ruby
+    class VM
+      def initialize(config)
+        @config = config
+      end
+
+      def mod
+        change_mem
+        shared_folder
+        local_network
+      end
+
+      ...
+    end
+
+    VM.new(config).mod
+    #+end_src
+
+    - bloated class
+    - many responsibilities (networking state, shared folder state)
+    - cleanup doable (more responsibilities)
+
+  - information hiding (delegates)
+    #+begin_src ruby
+    class VM
+      def initialize(config)
+        @config = config
+        network = config[:network_provider]
+        shared_folder = config[:shared_folder_provider]
+      end
+
+      def mod
+        change_mem
+        network.shared_folder(vm)
+        shared_folder.mod(vm)
+      end
+
+      ...
+    end
+
+    VM.new(config).mod
+    #+end_src
+
+    - more composable (swap out providers)
+    - mod is static
+    - cleanup can be delegated to providers
+
   - hybrid (middleware)
-    cleanup easy (warden)
-    reuse easy (composition is straight forward)
-    responsibilities clear (each step has a middleware)
-    still expects a lot of vm / config
+    #+begin_src ruby
+    middleware = builder(config) do |b|
+      b.use NetworkProvider
+      b.use Customizer
+      b.use SharedFoldersProvider
+    end
+
+    middleware(vm)
+    #+end_src
+
+    - cleanup easy (warden, each middleware defines cleanup)
+    - reuse easy (composition is straight forward)
+    - responsibilities clear (each step has a middleware/ hides some state)
+    - still expects a lot of vm / config
 
 * general thoughts
   assumptions:
@@ -52,8 +122,6 @@
 * module def
   - "responsibility assignment"
   - single responsibility principle: "A module (class) should only have one reason to change"
-  -
-
 
 * further thoughts
   Alternate school of thought, build dumb, refactor as needed.

@@ -1,4 +1,4 @@
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../assets/style.css" />
 #+OPTIONS: ^:nil
 * mocks as proof assumptions
   "Rational discussion is useful only when there is a significant base of shared assumptions." - Noam Chomsky
