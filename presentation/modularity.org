@@ -27,6 +27,7 @@
 
     - cleanup on exception?
     - expectation about vm and config
+    - external state must be  carefully handled (e.g. network config state on file system)
 
   - information hiding (VM class)
     #+begin_src ruby
@@ -79,9 +80,9 @@
   - hybrid (middleware)
     #+begin_src ruby
     middleware = builder(config) do |b|
-      b.use NetworkProvider
       b.use Customizer
       b.use SharedFoldersProvider
+      b.use NetworkProvider
     end
 
     middleware(vm)
