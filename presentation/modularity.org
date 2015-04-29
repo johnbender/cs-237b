@@ -28,6 +28,7 @@
     - cleanup on exception?
     - expectation about vm and config
     - external state must be  carefully handled (e.g. network config state on file system)
+    - shared folders over nfs require networking to be done first
 
   - information hiding (VM class)
     #+begin_src ruby
@@ -64,7 +65,7 @@
 
       def mod
         change_mem
-        network.shared_folder(vm)
+        network.mod(vm)
         shared_folder.mod(vm)
       end
 
