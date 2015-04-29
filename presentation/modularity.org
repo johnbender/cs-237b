@@ -26,8 +26,8 @@
     #+end_src
 
     - cleanup on exception?
-    - expectation about vm and config
-    - external state must be  carefully handled (e.g. network config state on file system)
+    - external state must be carefully communicated between teams
+    - vm/config mods must be communicated between teams
     - shared folders over nfs require networking to be done first
 
   - information hiding (VM class)
