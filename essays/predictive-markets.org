@@ -1,0 +1,11 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../assets/style.css" />
+#+OPTIONS: ^:nil
+
+* problem
+  premature refactoring can be wasterful
+  deciding when to refactor and how often requires a crystal ball
+  but! it is often the case that experience can provide an approximation of such a crystal ball
+
+* idea
+  use the wisdom of the crowd, motivated by money, to 'divine' where changes will occur
+  and therefore where the most design time should be spent to minimize impact during those changes

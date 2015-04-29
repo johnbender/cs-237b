@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>modularity</title>
-<!-- 2015-04-28 Tue 22:25 -->
+<!-- 2015-04-28 Tue 22:36 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="John Bender" />
@@ -145,11 +145,10 @@ for the JavaScript code in this tag.
 <ul>
 <li><a href="#sec-1">1. purpose</a></li>
 <li><a href="#sec-2">2. example</a></li>
-<li><a href="#sec-3">3. general thoughts</a></li>
-<li><a href="#sec-4">4. criteria</a></li>
-<li><a href="#sec-5">5. expected benefits</a></li>
-<li><a href="#sec-6">6. module def</a></li>
-<li><a href="#sec-7">7. further thoughts</a></li>
+<li><a href="#sec-3">3. criteria</a></li>
+<li><a href="#sec-4">4. expected benefits</a></li>
+<li><a href="#sec-5">5. module def</a></li>
+<li><a href="#sec-6">6. general thoughts</a></li>
 </ul>
 </div>
 </div>
@@ -205,6 +204,8 @@ vm_mod(vm, config)
 </li>
 <li>expectation about vm and config
 </li>
+<li>external state must be  carefully handled (e.g. network config state on file system)
+</li>
 </ul>
 </li>
 
@@ -230,6 +231,8 @@ vm_mod(vm, config)
 </div>
 
 <ul class="org-ul">
+<li>hiding from things like CLI
+</li>
 <li>bloated class
 </li>
 <li>many responsibilities (networking state, shared folder state)
@@ -264,6 +267,8 @@ vm_mod(vm, config)
 
 <ul class="org-ul">
 <li>more composable (swap out providers)
+</li>
+<li>more "hidey"
 </li>
 <li>mod is static
 </li>
@@ -301,33 +306,8 @@ middleware(vm)
 </div>
 
 <div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> general thoughts</h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> criteria</h2>
 <div class="outline-text-2" id="text-3">
-<p>
-assumptions:
-</p>
-<ul class="org-ul">
-<li>change will happen
-</li>
-<li>current requirements are correct
-</li>
-</ul>
-
-<p>
-questions:
-</p>
-<ul class="org-ul">
-<li>can the non-modular design be cheaper in the short term?
-</li>
-<li>premature optimization?
-</li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> criteria</h2>
-<div class="outline-text-2" id="text-4">
 <ul class="org-ul">
 <li>partially implied by module definition
 </li>
@@ -337,9 +317,9 @@ questions:
 </div>
 </div>
 
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> expected benefits</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> expected benefits</h2>
+<div class="outline-text-2" id="text-4">
 <p>
 (1) dev time reduced
 </p>
@@ -374,9 +354,9 @@ questions:
 </div>
 </div>
 
-<div id="outline-container-sec-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> module def</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> module def</h2>
+<div class="outline-text-2" id="text-5">
 <ul class="org-ul">
 <li>"responsibility assignment"
 </li>
@@ -386,19 +366,46 @@ questions:
 </div>
 </div>
 
-<div id="outline-container-sec-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> further thoughts</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> general thoughts</h2>
+<div class="outline-text-2" id="text-6">
 <p>
-Alternate school of thought, build dumb, refactor as needed.
-Drive refactoring through testability (eg testing begets DI)
+assumptions:
 </p>
+<ul class="org-ul">
+<li>change will happen
+</li>
+<li>current requirements are correct
+</li>
+</ul>
+
+<p>
+questions:
+</p>
+<ul class="org-ul">
+<li>can the non-modular design be cheaper in the short term?
+</li>
+<li>premature optimization?
+</li>
+</ul>
+
+<p>
+further:
+</p>
+<ul class="org-ul">
+<li>alternate school of thought, build dumb, refactor as needed.
+</li>
+<li>drive refactoring through testability (eg testing begets DI)
+</li>
+<li>seems like the right modularity abstraction is rarely general
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: John Bender</p>
-<p class="date">Created: 2015-04-28 Tue 22:25</p>
+<p class="date">Created: 2015-04-28 Tue 22:36</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
