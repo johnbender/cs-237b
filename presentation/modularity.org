@@ -1,0 +1,60 @@
+* purpose
+  establishing criteria by which a modularization can be constructed/measured
+
+* example
+  Vagrant, manipulating a common object structure (virtual machine) using some config.
+  Initially consider three modifications to the vm:
+  - change memory allocation
+  - add shared folder
+  - local networking configuration
+
+  Three different approaches:
+  - composed steps (procedure/function composition)
+    how do we handle cleanup on exception?
+    lots of expectation about vm and config
+  - information hiding (VM class)
+    bloated class
+    many responsibilities
+    does a sequence of method calls compose? (internal state)
+  - hybrid (middleware)
+    cleanup easy (warden)
+    reuse easy (composition is straight forward)
+    responsibilities clear (each step has a middleware)
+    still expects a lot of vm / config
+
+* general thoughts
+  assumptions:
+  - change will happen
+  - current requirements are correct
+
+  questions:
+  - can the non-modular design be cheaper in the short term?
+  - premature optimization?
+
+* criteria
+  - partially implied by module definition
+  - "Each task ...", sort of implies single responsibility?
+
+* expected benefits
+  (1) dev time reduced
+  - "share nothing" programming
+  - what happens if design time is significantly increased?
+  - is this a benefit in a single programmer environment?
+
+  (2) drastic changes
+  - aims for change to fall within module boundaries
+  - is it safe to assume that "drastic change" will happen?
+
+  (3) understood one module at a time
+  - designed for better understand which aids better design?
+  - does module understanding directly imply system understanding? (composable understanding)
+
+* module def
+  - "responsibility assignment"
+  - single responsibility principle: "A module (class) should only have one reason to change"
+  -
+
+
+* further thoughts
+  Alternate school of thought, build dumb, refactor as needed.
+  Drive refactoring through testability (eg testing begets DI)
