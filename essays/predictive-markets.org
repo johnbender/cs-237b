@@ -2,10 +2,24 @@
 #+OPTIONS: ^:nil
 
 * problem
-  premature refactoring can be wasterful
+  premature refactoring can be wasteful
   deciding when to refactor and how often requires a crystal ball
   but! it is often the case that experience can provide an approximation of such a crystal ball
 
-* idea
+* prediction market
   use the wisdom of the crowd, motivated by money, to 'divine' where changes will occur
   and therefore where the most design time should be spent to minimize impact during those changes
+
+  - each procedure has a day, week, month contracts for $1
+  - when the procedure changes, if the time range matches money is payed out to contract owners
+  - the traded value of the contract is the probability of the event
+  - have to account for time value?
+
+* language/tool support
+  - function level market values
+  - display values at rebase/pull time
+  - make decisions to refactor based predictive results
+
+* problems
+  - programmer gaming the system
+  - influence of current probability of decision to refactor
