@@ -64,16 +64,17 @@
   It's worth considering issuing contracts on a design document and not the code.
   This might harness the crowd to review higher level concepts without getting bogged
   down finding bugs or typos. For example, if a programmer misspells a variable name it's
-  fairly sure that will be changed but nothing interesting is learned about design.
+  fairly sure that the enclosing module will be changed but nothing interesting
+  is learned about design.
+
+  Along the same lines, what constitutes a change meaningful enough to trigger
+  a pay-out on the contract? Maybe if the tests change or the input/output relation?
 
 * further examples
-  - kwicx index program (bet against steps decomposition)
-  - storing time series data in a sql database may be a red flag
-  - a poorly normalized database might be a red flag
-  - storing passwords in clear text is a red flag
-  - functionality in controller methods
-  - one controller that does everything will need to be refactored
+  - storing time series data in a sql database, will change with scaling
+  - a poorly normalized database, will change with pain over time
+  - storing passwords in clear text, someone will notice and change
+  - functionality in controller methods, fat models convention, testing
 
 * problems
   - "insider trading", programmer gaming the system
-  - defining boundaries is difficult (do we associate contracts with classes/interfaces)?
