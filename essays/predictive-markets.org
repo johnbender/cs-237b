@@ -2,24 +2,78 @@
 #+OPTIONS: ^:nil
 
 * problem
-  premature refactoring can be wasteful
-  deciding when to refactor and how often requires a crystal ball
-  but! it is often the case that experience can provide an approximation of such a crystal ball
+  Arriving at a good system design requires a few things:
+  1. motivation, the programmer(s) must be motivated to design a good system
+  2. experience, the programmer(s) must be capable of designing a good system
+  3. foreknowledge, the programmer(s) must know enough about the project/goal/road-map
+     to design a system well.
 
-* prediction market
-  use the wisdom of the crowd, motivated by money, to 'divine' where changes will occur
-  and therefore where the most design time should be spent to minimize impact during those changes
+  We focus here on the third requirement,
+  noting that we may in part or whole be addressing the second as well.
+  We leave "good system design" abstract for the moment.
 
-  - each procedure has a day, week, month contracts for $1
-  - when the procedure changes, if the time range matches money is payed out to contract owners
-  - the traded value of the contract is the probability of the event
-  - have to account for time value?
+  In this case, even experts can't always predict how a
+  system will need to change during the course of its construction.
+  This might be due to a lack experience, time, or domain expertise.
+  In any case, this makes designing a system difficult.
+  If the choices one makes turn out to be incorrect the original effort spent
+  designing the system and implementing it for that design was wasted in part
+  and more effort must be expended to align to the "right" design.
 
-* language/tool support
-  - function level market values
-  - display values at rebase/pull time
-  - make decisions to refactor based predictive results
+  We need a crystal ball! ... or at least a rough approximation.
+
+* predictive markets
+  We will construct our crystal ball from a large collection of people
+  willing to bet money on how and when a system will change.
+  That is we will leverage the wisdom of the crowd motivated by money
+  to "divine" future system changes.
+
+  The scheme proceeds as follows:
+
+  1. Contracts will be sold on an exchange.
+  2. Each contract has a duration, portion of the design, and type.
+  3. Each pays unit value if the design changes within the time period, zero o/w.
+
+  The cost of purchasing a contract on the exchange represents
+  the participant's prediction of the probability of change
+  for the targeted portion of the design before the time period is up.
+  That is, a participant who thinks that there is a 70% change a design feature
+  will change should be willing to pay 70 cents for that contract (expected value).
+
+  With this information in hand the programmer can evaluate their module boundaries for flaws.
+  In a way you might see this as hyper motivated code review.
+
+* example
+  Consider the circular shift procedure from the first modularization
+  from the Parnas paper.
+
+  Parnas, participating in the market, knows that there are many reasons that
+  the first modularization might change. He's so sure he's willing to spend nearly
+  the contract pay-out since he'll make a dollar for each contract with near
+  certainty.
+
+  We might convey the change probability as a number or even a color in the code.
+
+  #+begin_src ruby
+  def shift(lines) # [0.8 (month)]
+    # ...
+  end
+  #+end_src
+
+* design decisions
+  It's worth considering issuing contracts on a design document and not the code.
+  This might harness the crowd to review higher level concepts without getting bogged
+  down finding bugs or typos. For example, if a programmer misspells a variable name it's
+  fairly sure that will be changed but nothing interesting is learned about design.
+
+* further examples
+  - kwicx index program (bet against steps decomposition)
+  - storing time series data in a sql database may be a red flag
+  - a poorly normalized database might be a red flag
+  - storing passwords in clear text is a red flag
+  - functionality in controller methods
+  - one controller that does everything will need to be refactored
 
 * problems
-  - programmer gaming the system
-  - influence of current probability of decision to refactor
+  - "insider trading", programmer gaming the system
+  - defining boundaries is difficult (do we associate contracts with classes/interfaces)?
