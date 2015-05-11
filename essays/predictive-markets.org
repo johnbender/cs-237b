@@ -70,6 +70,11 @@
   Along the same lines, what constitutes a change meaningful enough to trigger
   a pay-out on the contract? Maybe if the tests change or the input/output relation?
 
+* ad-hoc contracts
+  In many cases it may be advantageous to allow users to issue contracts based on
+  many different criteria beyond dates and changes. For example, asking generally whether
+  a method has a bug in it would be one way to quickly get many eyes on a method.
+
 * further examples
   - storing time series data in a sql database, will change with scaling
   - a poorly normalized database, will change with pain over time
