@@ -73,7 +73,9 @@
 * ad-hoc contracts
   In many cases it may be advantageous to allow users to issue contracts based on
   many different criteria beyond dates and changes. For example, asking generally whether
-  a method has a bug in it would be one way to quickly get many eyes on a method.
+  a method has a bug in it would be one way to quickly get many eyes on a method. Further,
+  interested crowds may wish to generate their own contracts if they find something of
+  note not covered by the programmers.
 
 * further examples
   - storing time series data in a sql database, will change with scaling
