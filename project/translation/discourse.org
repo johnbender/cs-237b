@@ -23,6 +23,7 @@
 
 * CategoryList
   https://github.com/discourse/discourse/blob/master/spec/components/category_list_spec.rb
+
   under the assumptions:
   - a fabricated user exists
   - a fabricated admin exists
