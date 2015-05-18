@@ -9,7 +9,7 @@ describe 'ClassifierUtils' do
     # tests and mocks/stubs (raises/returns called on the expectation)
     TCPSocket.expects(:open).raises('no-connection')
     OpenSSL::X509::Certificate.expects(:new).with('certkey').returns(stub('cert'))
-    OpenSSL::PKey::RSA.expects(:new).with('certkey', nil).returns(stub('key'))
+    OpenSSL::PKey::RSA.expects(:new).with('certkey', nil).returns(stub('key')
 
     # tests
     expect { handle.get('/hi') }.to raise_error('no-connection')
@@ -29,12 +29,17 @@ describe CommonPasswords do
       mock_redis.stubs(:exists).returns(false)
       mock_redis.stubs(:scard).returns(0)
       described_class.stubs(:redis).returns(mock_redis)
-      described_class.expects(:load_passwords).returns(['password'])
 
       # test
+      described_class.expects(:load_passwords).returns(['password'])
       list = described_class.password_list
       expect(list).to respond_to(:include?)
     end
   end
 end
   #+end_src
+
+* impl.
+
+  write down mocks/stubs
+  try to follow some method to compute the documentationg

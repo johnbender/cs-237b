@@ -1,0 +1,66 @@
+* ideas for reduction
+  - refactor duplicate assumptions
+  - refactor assumptions that weaken the argument
+  - simplify proofs
+  - group/hide based on programmer direction
+  - mutation testing to reduce assumptions: http://pitest.org/
+
+* notable
+  - category list global assumption is only needed for proofs in the "with a category" context
+  - first test in second proof requires initial assumptions
+  - output creates virtuous cycle
+  - duplicate assumptions, from the first proof:
+    - a fabricated category `cat` exists
+    - a fabricated topic exists with the category `cat`
+    - `cat` was sent `set_permissions` with `:admins => :full`
+    - `cat` was sent `save`
+    and from the second proof (rename `private_cat` to `cat`):
+    - a fabricated category `private_cat` exists
+    - a fabricated topic exists with the category `private_cat`
+    - `private_cat` was sent `set_permission` with `:admins => :full`
+    - `private_cat` was sent `save`
+
+* CategoryList
+  under the assumptions:
+  - a fabricated user exists
+  - a fabricated admin exists
+  - a new category list created with a new guardian created with a new user exists
+
+** in the context of "security"
+   under the proof specific assumptions:
+   - a fabricated category `cat` exists
+   - a fabricated topic exists with the category `cat`
+   - `cat` was sent `set_permissions` with `:admins => :full`
+   - `cat` was sent `save`
+
+   it can be shown that:
+   - a new CategoryList created with a new Guardian created with the fabricated admin
+     sent categories sent count will have a value equal to 2
+   - a new CategoryList created with a new Guardian created with the fabricated user
+     sent categories sent count will have a value equal to 2
+   - a new CategoryList created with a new Guardian created with nothing
+     sent categories sent count will have a value equal to 2
+
+   intuitively, CategoryList can properly hide secure categories
+
+   further
+
+   under the proof specific assumptions:
+   - a fabricated category `public_cat` exists
+   - a fabricated topic exists with the category `public_cat`
+   - a fabricated category `private_cat` exists
+   - a fabricated topic exists with the category `private_cat`
+   - `private_cat` was sent `set_permission` with `:admins => :full`
+   - `private_cat` was sent `save`
+   - a fabricated category `secret_subcat` exists with `:parent_category_id => public_cat.id`
+   - a fabricated topic exists with the category `secret_subcat`
+   - `secret_subcat` was sent `set_permissions` with `admins => :full`
+   - CategoryFeaturedTopic is sent `feature_topics`
+
+   it can be shown that:
+   - a new CategoryList created with a new Guardian created with the fabricated admin
+     sent `categories` sent `find` with block { |x| x.name == public_cat.name }
+     sent `displayable_topics` sent `count` will have a value equal to two
+   - ...
+
+   intuitively, CategoryList doesn't show topics that you can't view
