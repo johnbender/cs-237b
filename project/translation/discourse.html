@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>discourse</title>
-<!-- 2015-05-17 Sun 22:29 -->
+<!-- 2015-05-18 Mon 08:25 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="John Bender" />
@@ -186,22 +186,22 @@ for the JavaScript code in this tag.
 </li>
 <li>a fabricated topic exists with the category `cat`
 </li>
-<li>`cat` was sent `set<sub>permissions`</sub> with `:admins =&gt; :full`
+<li>`cat` was sent `set_permissions` with `:admins =&gt; :full`
 </li>
 <li>`cat` was sent `save`
 </li>
 </ul>
 <p>
-and from the second proof (rename `private<sub>cat`</sub> to `cat`):
+and from the second proof (rename `cat` to `private_cat`):
 </p>
 <ul class="org-ul">
-<li>a fabricated category `private<sub>cat`</sub> exists
+<li>a fabricated category `private_cat` exists
 </li>
-<li>a fabricated topic exists with the category `private<sub>cat`</sub>
+<li>a fabricated topic exists with the category `private_cat`
 </li>
-<li>`private<sub>cat`</sub> was sent `set<sub>permission`</sub> with `:admins =&gt; :full`
+<li>`private_cat` was sent `set_permission` with `:admins =&gt; :full`
 </li>
-<li>`private<sub>cat`</sub> was sent `save`
+<li>`private_cat` was sent `save`
 </li>
 </ul>
 </li>
@@ -213,6 +213,7 @@ and from the second proof (rename `private<sub>cat`</sub> to `cat`):
 <h2 id="sec-3"><span class="section-number-2">3</span> CategoryList</h2>
 <div class="outline-text-2" id="text-3">
 <p>
+<a href="https://github.com/discourse/discourse/blob/master/spec/components/category_list_spec.rb">https://github.com/discourse/discourse/blob/master/spec/components/category_list_spec.rb</a>
 under the assumptions:
 </p>
 <ul class="org-ul">
@@ -236,7 +237,7 @@ under the proof specific assumptions:
 </li>
 <li>a fabricated topic exists with the category `cat`
 </li>
-<li>`cat` was sent `set<sub>permissions`</sub> with `:admins =&gt; :full`
+<li>`cat` was sent `set_permissions` with `:admins =&gt; :full`
 </li>
 <li>`cat` was sent `save`
 </li>
@@ -269,25 +270,25 @@ further
 under the proof specific assumptions:
 </p>
 <ul class="org-ul">
-<li>a fabricated category `public<sub>cat`</sub> exists
+<li>a fabricated category `public_cat` exists
 </li>
-<li>a fabricated topic exists with the category `public<sub>cat`</sub>
+<li>a fabricated topic exists with the category `public_cat`
 </li>
-<li>a fabricated category `private<sub>cat`</sub> exists
+<li>a fabricated category `private_cat` exists
 </li>
-<li>a fabricated topic exists with the category `private<sub>cat`</sub>
+<li>a fabricated topic exists with the category `private_cat`
 </li>
-<li>`private<sub>cat`</sub> was sent `set<sub>permission`</sub> with `:admins =&gt; :full`
+<li>`private_cat` was sent `set_permission` with `:admins =&gt; :full`
 </li>
-<li>`private<sub>cat`</sub> was sent `save`
+<li>`private_cat` was sent `save`
 </li>
-<li>a fabricated category `secret<sub>subcat`</sub> exists with `:parent<sub>category</sub><sub>id</sub> =&gt; public<sub>cat</sub>.id`
+<li>a fabricated category `secret_subcat` exists with `:parent_category_id =&gt; public_cat.id`
 </li>
-<li>a fabricated topic exists with the category `secret<sub>subcat`</sub>
+<li>a fabricated topic exists with the category `secret_subcat`
 </li>
-<li>`secret<sub>subcat`</sub> was sent `set<sub>permissions`</sub> with `admins =&gt; :full`
+<li>`secret_subcat` was sent `set_permissions` with `admins =&gt; :full`
 </li>
-<li>CategoryFeaturedTopic is sent `feature<sub>topics`</sub>
+<li>CategoryFeaturedTopic is sent `feature_topics`
 </li>
 </ul>
 
@@ -296,8 +297,8 @@ it can be shown that:
 </p>
 <ul class="org-ul">
 <li>a new CategoryList created with a new Guardian created with the fabricated admin
-sent `categories` sent `find` with block { |x| x.name == public<sub>cat</sub>.name }
-sent `displayable<sub>topics`</sub> sent `count` will have a value equal to two
+sent `categories` sent `find` with block { |x| x.name == public_cat.name }
+sent `displayable_topics` sent `count` will have a value equal to two
 </li>
 <li>&#x2026;
 </li>
@@ -312,7 +313,7 @@ intuitively, CategoryList doesn't show topics that you can't view
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: John Bender</p>
-<p class="date">Created: 2015-05-17 Sun 22:29</p>
+<p class="date">Created: 2015-05-18 Mon 08:25</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
