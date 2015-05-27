@@ -3,3 +3,4 @@ essays/auto
 *.log
 *.pdf
 .DS_store
+.vagrant
