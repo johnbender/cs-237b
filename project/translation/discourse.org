@@ -11,59 +11,125 @@
   - first test in second proof requires initial assumptions
   - output creates virtuous cycle
   - duplicate assumptions, from the first proof:
-    - a fabricated category `cat` exists
-    - a fabricated topic exists with the category `cat`
+    - a category `cat` exists
+    - a topic exists with the category `cat`
     - `cat` was sent `set_permissions` with `:admins => :full`
     - `cat` was sent `save`
     and from the second proof (rename `cat` to `private_cat`):
-    - a fabricated category `private_cat` exists
-    - a fabricated topic exists with the category `private_cat`
+    - a category `private_cat` exists
+    - a topic exists with the category `private_cat`
     - `private_cat` was sent `set_permission` with `:admins => :full`
     - `private_cat` was sent `save`
 
 * CategoryList
   https://github.com/discourse/discourse/blob/master/spec/components/category_list_spec.rb
+** proof
+   under the assumptions:
+   - a user exists
+   - a admin exists
+   - a new category list created with a new guardian created with a new user exists
 
+*** in the context of "security"
+    under the proof specific assumptions:
+    - a category `cat` exists
+    - a topic exists with the category `cat`
+    - `cat` was sent `set_permissions` with `:admins => :full`
+    - `cat` was sent `save`
+
+    it can be shown that:
+    - a new CategoryList created with a new Guardian created with the admin
+      sent categories sent count will have a value equal to 2
+    - a new CategoryList created with a new Guardian created with the user
+      sent categories sent count will have a value equal to 2
+    - a new CategoryList created with a new Guardian created with nothing
+      sent categories sent count will have a value equal to 2
+
+    intuitively, CategoryList can properly hide secure categories
+
+    further
+
+    under the proof specific assumptions:
+    - a category `public_cat` exists
+    - a topic exists with the category `public_cat`
+    - a category `private_cat` exists
+    - a topic exists with the category `private_cat`
+    - `private_cat` was sent `set_permission` with `:admins => :full`
+    - `private_cat` was sent `save`
+    - a category `secret_subcat` exists with `:parent_category_id => public_cat.id`
+    - a topic exists with the category `secret_subcat`
+    - `secret_subcat` was sent `set_permissions` with `admins => :full`
+    - CategoryFeaturedTopic is sent `feature_topics`
+
+    it can be shown that:
+    - a new CategoryList created with a new Guardian created with the admin
+      sent `categories` sent `find` with block { |x| x.name == public_cat.name }
+      sent `displayable_topics` sent `count` will have a value equal to two
+    - ...
+
+    intuitively, CategoryList doesn't show topics that you can't view
+
+* CategoryList V2
+  https://github.com/discourse/discourse/compare/master...johnbender:v2?expand=1
+** result
+   works:
+
+   assumptions for security context are useful for someone new to the system:
+   - a user exists
+   - a admin exists
+   - a category `private_cat` exists
+   - a topic exists with the category `private_cat`
+   - `private_cat` was sent `set_permissions` with `:admins => :full`
+
+   clear that admins, private categories, topics are a system trait
+   not confined to one test
+
+   generally this distinction is harder to make for test specific assumptions
+   requires user annotation
+
+   having them gathered per test or per context is useful (see code)
+   having them in english is also useful
+
+   doesn't work:
+   even with user annotation the value of the actual test "docs" seems questionable.
+
+   further work:
+   refactoring could be taken further
+
+** proof
   under the assumptions:
-  - a fabricated user exists
-  - a fabricated admin exists
-  - a new category list created with a new guardian created with a new user exists
+  - a user exists
+  - a admin exists
 
-** in the context of "security"
-   under the proof specific assumptions:
-   - a fabricated category `cat` exists
-   - a fabricated topic exists with the category `cat`
-   - `cat` was sent `set_permissions` with `:admins => :full`
-   - `cat` was sent `save`
+*** in the context of "security"
+    under the context specific assumptions:
+    - a category `private_cat` exists
+    - a topic exists with the category `private_cat`
+    - `private_cat` was sent `set_permissions` with `:admins => :full`
 
-   it can be shown that:
-   - a new CategoryList created with a new Guardian created with the fabricated admin
-     sent categories sent count will have a value equal to 2
-   - a new CategoryList created with a new Guardian created with the fabricated user
-     sent categories sent count will have a value equal to 2
-   - a new CategoryList created with a new Guardian created with nothing
-     sent categories sent count will have a value equal to 2
+    under the proof specific assumptions:
+    none
 
-   intuitively, CategoryList can properly hide secure categories
+    it can be shown that:
+    - `admin_list` sent count will have a value equal to 2
+    - `user_list` sent count will have a value equal to 0
+    - `nil_list` sent count will have a value equal to 0
 
-   further
+    intuitively, CategoryList can properly hide secure categories
 
-   under the proof specific assumptions:
-   - a fabricated category `public_cat` exists
-   - a fabricated topic exists with the category `public_cat`
-   - a fabricated category `private_cat` exists
-   - a fabricated topic exists with the category `private_cat`
-   - `private_cat` was sent `set_permission` with `:admins => :full`
-   - `private_cat` was sent `save`
-   - a fabricated category `secret_subcat` exists with `:parent_category_id => public_cat.id`
-   - a fabricated topic exists with the category `secret_subcat`
-   - `secret_subcat` was sent `set_permissions` with `admins => :full`
-   - CategoryFeaturedTopic is sent `feature_topics`
+    further
 
-   it can be shown that:
-   - a new CategoryList created with a new Guardian created with the fabricated admin
-     sent `categories` sent `find` with block { |x| x.name == public_cat.name }
-     sent `displayable_topics` sent `count` will have a value equal to two
-   - ...
+    under the proof specific assumptions:
+    - a category `public_cat` exists
+    - a topic exists with the category `public_cat`
+    - a category `secret_subcat` exists with `:parent_category_id => public_cat.id`
+    - a topic exists with the category `secret_subcat`
+    - `secret_subcat` was sent `set_permissions` with `admins => :full`
 
-   intuitively, CategoryList doesn't show topics that you can't view
+    it can be shown that:
+    - `public_category_admin_topics` send count will have a value equal to 2
+    - `private_category_admin_topics` send count will have a value equal to 1
+    - ...
+
+    intuitively, CategoryList doesn't show topics that you can't view
+* V3
+  collect common assumptions from many different tests
