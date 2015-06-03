@@ -75,7 +75,7 @@
 
    assumptions for security context are useful for someone new to the system:
    - a user exists
-   - a admin exists
+   - an admin exists
    - a category `private_cat` exists
    - a topic exists with the category `private_cat`
    - `private_cat` was sent `set_permissions` with `:admins => :full`
@@ -133,3 +133,50 @@
     intuitively, CategoryList doesn't show topics that you can't view
 * V3
   collect common assumptions from many different tests
+
+  notes:
+  it's at least odd that the category list
+
+** ComposerMessagesFinder
+*** in the context of "delegates work"
+    - a user exists
+    - a finder exists (*)
+
+*** in the context of ".check_education_message"
+    - a user exists
+
+**** in the context of "creating a topic"
+     - a finder exists (same as *)
+     - SiteSetting should return 10 when sent `educate_until_posts`
+
+**** in the context of "creating a reply"
+     - a finder exists
+
+** CategoryList
+   - a user exists
+   - a admin exists
+
+*** in the context of "security"
+    - a category `private_cat` exists
+    - a topic exists with the category `private_cat`
+    - `private_cat` was sent `set_permissions` with `:admins => :full`
+
+*** in the context of "with a category"
+    - a category exists
+    - a category_list exists
+
+*** in the context of "without a topic in a category"
+    - a topic exists
+    - a category exists when `category_list` is sent `categories` is sent `first`
+
+*** to describe a category order
+    - a category ids exists
+    - `uncategorized` comes from `Category` send `find` with `SiteSetting.uncategorized_category_id`
+    - `uncategorized` has a `position` value of 100
+    - `uncategorized` send save
+
+*** in the context of "fixed_category_positions is enabled"
+    - when SiteSettings is sent `fixed_category_positions` it should return true
+
+*** in the context of "fixed_category_positions is disabled"
+    - when SiteSettings is sent `fixed_category_positions` it should return false
