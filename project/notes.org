@@ -131,7 +131,6 @@ ComposerMessagesFinder
       |=
       `finder` has a message when a user has posted too much
 
-
 Finished in 0.3982 seconds
 7 examples, 0 failures
 #+end_src
