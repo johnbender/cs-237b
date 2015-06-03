@@ -77,12 +77,12 @@ ComposerMessagesFinder
   delegates work
     `user` exists
     `finder` exists
-    `finder`, when sent `check_education_message`
-    `finder`, when sent `check_new_user_many_replies`
-    `finder`, when sent `check_avatar_notification`
-    `finder`, when sent `check_sequential_replies`
-    `finder`, when sent `check_dominating_topic`
-    `finder`, when sent `check_reviving_old_topic`
+    `finder`, sent `check_education_message`
+    `finder`, sent `check_new_user_many_replies`
+    `finder`, sent `check_avatar_notification`
+    `finder`, sent `check_sequential_replies`
+    `finder`, sent `check_dominating_topic`
+    `finder`, sent `check_reviving_old_topic`
     |=
     `finder` calls all the message finders
 
@@ -91,14 +91,14 @@ ComposerMessagesFinder
       `user` exists
       `finder` exists
       SiteSetting, when sent `educate_until_posts` returns 10
-      `user`, when sent `created_topic_count` returns 9
+      `user`, sent `created_topic_count` returns 9
       |=
       `finder` returns a message for a user who has not posted any topics
 
       `user` exists
       `finder` exists
       SiteSetting, when sent `educate_until_posts` returns 10
-      `user`, when sent `created_topic_count` returns 10
+      `user`, sent `created_topic_count` returns 10
       |=
       `finder` returns no message when the user has posted enough topics
 
@@ -106,14 +106,14 @@ ComposerMessagesFinder
       `user` exists
       `finder` exists
       SiteSetting, when sent `educate_until_posts` returns 10
-      `user`, when sent `post_count` returns 9
+      `user`, sent `post_count` returns 9
       |=
       `finder` returns a message for a user who has not posted any topics
 
       `user` exists
       `finder` exists
       SiteSetting, when sent `educate_until_posts` returns 10
-      `user`, when sent `post_count` returns 10
+      `user`, sent `post_count` returns 10
       |=
       `finder` returns no message when the user has posted enough topics
 
@@ -121,19 +121,19 @@ ComposerMessagesFinder
     replying
       `user` exists
       `finder` exists
-      `user`, when sent `posted_too_much_in_topic?` returns false
+      `user`, sent `posted_too_much_in_topic?` returns false
       |=
       `finder` has no message when `posted_too_much_in_topic?` is false
 
       `user` exists
       `finder` exists
-      `user`, when sent `posted_too_much_in_topic?` returns true
+      `user`, sent `posted_too_much_in_topic?` returns true
       |=
       `finder` has a message when a user has posted too much
 
 
-Finished in 0.39291 seconds
-5 examples, 0 failures
+Finished in 0.3982 seconds
+7 examples, 0 failures
 #+end_src
 
 #+begin_src bash
